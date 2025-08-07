@@ -1,5 +1,5 @@
-# Start with Eclipse Temurin (OpenJDK) with Maven
-FROM maven:3.9.6-eclipse-temurin-17
+# Start with Gradle base image with JDK 21
+FROM gradle:8.13-jdk21
 
 # Switch to root to install additional packages
 USER root
@@ -24,7 +24,11 @@ ENV JAVA_HOME="/opt/java/openjdk"
 
 # Install dependencies for Playwright browsers
 RUN apt-get update && \
-    apt-get install -y wget gnupg libnss3 libxss1 libasound2 libdrm2 libxcomposite1 libxdamage1 libxrandr2 libgbm1 libatk-bridge2.0-0 libgtk-3-0 && \
+    apt-get install -y libglib2.0-0t6 libnspr4 libnss3 libdbus-1-3 libatk1.0-0t64 \
+                      libatk-bridge2.0-0t64 libcups2t64 libxcb1 libxkbcommon0 \
+                      libatspi2.0-0t64 libx11-6 libxcomposite1 libxdamage1 \
+                      libxext6 libxfixes3 libxrandr2 libgbm1 libcairo2 \
+                      libpango-1.0-0 libasound2t64 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -37,25 +41,14 @@ RUN wget https://github.com/watchexec/watchexec/releases/download/v1.24.2/watche
 # Copy project files
 COPY . .
 
-# Make scripts executable
-RUN chmod +x ./run-tests.sh
-
-# Install npm dependencies
-RUN npm install
-
-# Pre-download Maven dependencies to cache them in Docker layer
-RUN mvn dependency:go-offline -B
-
-# Install Playwright browsers
-RUN npx playwright install chromium
+# Pre-download Gradle dependencies to cache them in Docker layer
+RUN gradle build -x test --no-daemon
 
 # Verify tools are available
 RUN echo "=== Tool Verification ===" && \
     java -version && \
     node --version && \
     npm --version && \
-    mvn --version
+    gradle --version
 
 EXPOSE 8080
-
-CMD ["npm", "run", "start"]

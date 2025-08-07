@@ -1,0 +1,36 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'com.skillerwhale'
+version = '1.0.0'
+description = 'Testing at different layers exercise'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    junitVersion = '5.10.1'
+    playwrightVersion = '1.53.0'
+}
+
+dependencies {
+    testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
+    testImplementation "org.assertj:assertj-core:3.24.2"
+    testImplementation "com.microsoft.playwright:playwright:${playwrightVersion}"
+}
+
+task playwright(type: JavaExec) {
+  classpath sourceSets.test.runtimeClasspath
+  mainClass = 'com.microsoft.playwright.CLI'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+application {
+    mainClass = 'com.skillerwhale.wordle.WordleApplication'
+}
