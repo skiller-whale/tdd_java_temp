@@ -11,11 +11,12 @@ services:
     working_dir: /app
     command: ["watchexec", "--watch", "src", "--exts", "java", "--restart", "gradle run"]
     init: true # to ensure signal handling works (and you can kill the container with ctrl-c)
-  exercises:
-    profiles: ["exercises"] # exclude from "docker-compose up"
+  tests:
     build: .
     volumes:
       - "./src:/app/src"
       - "./gradle.build:/app/gradle.build"
       - "~/.m2:/root/.m2"
-    command: ["/bin/bash"]
+    working_dir: /app
+    command: ["gradle test --continuous"]
+    init: true # to ensure signal handling works (and you can kill the container with ctrl-c)

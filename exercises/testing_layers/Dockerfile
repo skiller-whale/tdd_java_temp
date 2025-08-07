@@ -22,16 +22,6 @@ RUN ln -sf /usr/bin/node /usr/local/bin/node && \
 ENV PATH="/usr/local/bin:/usr/bin:$PATH"
 ENV JAVA_HOME="/opt/java/openjdk"
 
-# Install dependencies for Playwright browsers
-RUN apt-get update && \
-    apt-get install -y libglib2.0-0t6 libnspr4 libnss3 libdbus-1-3 libatk1.0-0t64 \
-                      libatk-bridge2.0-0t64 libcups2t64 libxcb1 libxkbcommon0 \
-                      libatspi2.0-0t64 libx11-6 libxcomposite1 libxdamage1 \
-                      libxext6 libxfixes3 libxrandr2 libgbm1 libcairo2 \
-                      libpango-1.0-0 libasound2t64 && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
 # Install watchexec (musl static binary)
 RUN wget https://github.com/watchexec/watchexec/releases/download/v1.24.2/watchexec-1.24.2-x86_64-unknown-linux-musl.tar.xz && \
     tar -xf watchexec-1.24.2-x86_64-unknown-linux-musl.tar.xz && \
