@@ -18,5 +18,5 @@ services:
       - "./gradle.build:/app/gradle.build"
       - "~/.m2:/root/.m2"
     working_dir: /app
-    command: ["gradle test --continuous"]
+    command: gradle test --continuous
     init: true # to ensure signal handling works (and you can kill the container with ctrl-c)
