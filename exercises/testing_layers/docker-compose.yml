@@ -6,7 +6,6 @@ services:
     volumes:
       - "./src:/app/src"
       - "./gradle.build:/app/gradle.build"
-      - "./package.json:/app/package.json"
       - "~/.m2:/root/.m2"
     working_dir: /app
     command: ["watchexec", "--watch", "src", "--exts", "java", "--restart", "gradle run"]
