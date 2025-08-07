@@ -42,6 +42,7 @@ RUN wget https://github.com/watchexec/watchexec/releases/download/v1.24.2/watche
 COPY . .
 
 # Pre-download Gradle dependencies to cache them in Docker layer
+RUN gradle playwright --no-daemon --args "install-deps"
 RUN gradle build -x test --no-daemon
 
 # Verify tools are available
